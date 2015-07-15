@@ -3,11 +3,15 @@ var markers = [];
 var infoWindows = [];
 var openWindow;
 var startLocation;
+var endLocation;
 var stationsVisible = true;
 
 function initialize() {
   map = new google.maps.Map(document.getElementById('map-canvas'), {
-    zoom: 16 });
+    zoom: 16,
+    styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]},
+             { featureType: "transit", elementType: "labels", stylers: [{ visibility: "off" }]}],
+    disableDefaultUI: true});
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(geo_success, geo_error, geo_options);
@@ -15,6 +19,8 @@ function initialize() {
     alert("HTML5 location failed");
     geo_error();
   }
+
+  endLocation = new google.maps.Marker();
 
   for (var index = 0; index < data.stationBeanList.length; ++index) {
     var curStation = data.stationBeanList[index];
@@ -43,6 +49,7 @@ function initialize() {
     }(index));
   }
 
+  var start_input = (document.getElementById('start-input'));
   google.maps.event.addListener(map, 'click', function(e) {
     if (openWindow) {
       openWindow.close();
@@ -53,6 +60,25 @@ function initialize() {
 
     startLocation = new google.maps.Marker({position: e.latLng, map: map});
     map.panTo(startLocation.getPosition());
+  });
+
+  var end_input = (document.getElementById('end-input'));
+  map.controls[google.maps.ControlPosition.LEFT_TOP].push(start_input);
+  map.controls[google.maps.ControlPosition.LEFT_TOP].push(end_input);
+  map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('panel'));
+  var autocomplete_start = new google.maps.places.Autocomplete(start_input);
+  autocomplete_start.bindTo('bounds', map);
+  var autocomplete_end = new google.maps.places.Autocomplete(end_input);
+  autocomplete_end.bindTo('bounds', map);
+
+  google.maps.event.addListener(autocomplete_start, 'place_changed', function() {
+    startLocation.setPosition(autocomplete_start.getPlace().geometry.location);
+    startLocation.setIcon('http://www.google.com/mapfiles/markerA.png');
+  });
+  google.maps.event.addListener(autocomplete_end, 'place_changed', function() {
+    endLocation.setPosition(autocomplete_end.getPlace().geometry.location);
+    endLocation.setIcon('http://www.google.com/mapfiles/markerB.png');
+    endLocation.setMap(map);
   });
 }
 

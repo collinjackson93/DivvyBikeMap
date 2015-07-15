@@ -1,6 +1,6 @@
 extends layout
 block head
-  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3Nt-cdB_mNXe_1qYOVv3xSoVUQ6S6wRo&libraries=geometry")
+  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3Nt-cdB_mNXe_1qYOVv3xSoVUQ6S6wRo&libraries=geometry,places")
   script(src='/javascripts/index.js')
   script(src="//code.jquery.com/jquery-1.11.3.min.js")
   script(type='text/javascript').
@@ -9,4 +9,6 @@ block content
   #panel
     input(onclick="toggleStations();" type="button" value="Toggle Stations")
     input(onclick="findNearestStation(startLocation.getPosition());" type="button" value="Closest Station")
+  input#start-input(class="controls" type="text" placeholder="Enter start location" onclick="this.select();")
+  input#end-input(class="controls" type="text" placeholder="Enter end location" onclick="this.select();")
   #map-canvas
