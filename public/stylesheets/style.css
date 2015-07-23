@@ -62,3 +62,7 @@ html, body, #map-canvas {
 #end-input:focus {
   border-color: #4d90fe;
 }
+
+#get-directions {
+  margin-left: 12px;
+}

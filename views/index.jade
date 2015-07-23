@@ -8,7 +8,8 @@ block head
 block content
   #panel
     input(onclick="toggleStations();" type="button" value="Toggle Stations")
-    input(onclick="findNearestStation(startLocation.getPosition());" type="button" value="Closest Station")
+    input(onclick="findNearestStation(startLocation.getPosition(), true);" type="button" value="Closest Station")
   input#start-input(class="controls" type="text" placeholder="Enter start location" onclick="this.select();")
   input#end-input(class="controls" type="text" placeholder="Enter end location" onclick="this.select();")
+  input#get-directions(onclick="getDirections();" type="button" value="Get Directions")
   #map-canvas
